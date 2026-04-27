@@ -17,6 +17,7 @@ struct HomeView: View {
             Color.theme.background
             VStack {
                 header
+                HomeStatsView(showPortfolio: $showPortfolio)
                 SearchBarView(searchText: $homeVM.searchText)
                 coinList
                 Spacer(minLength: 0)

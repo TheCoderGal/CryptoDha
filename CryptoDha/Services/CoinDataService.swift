@@ -50,7 +50,6 @@ class CoinDataService {
                 }
             } receiveValue: { coinData in
                 self.allCoins = coinData
-                print("CoinData \(coinData)")
                 self.cancellable?.cancel()
             }
         
