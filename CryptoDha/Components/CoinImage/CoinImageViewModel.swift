@@ -11,7 +11,7 @@ import Combine
 
 class CoinImageViewModel: ObservableObject {
     
-    @Published var imageData: Data?
+    @Published var image: UIImage?
     @Published var isLoading = false
     let coinImageDataService: CoinImageDataService
     let coin: Coin
@@ -26,10 +26,10 @@ class CoinImageViewModel: ObservableObject {
     }
     
     func getCoinImageData() {
-        coinImageDataService.$imageData
-            .sink { [weak self]data in
+        coinImageDataService.$image
+            .sink { [weak self]image in
                 self?.isLoading = false
-                self?.imageData = data
+                self?.image = image
             }
             .store(in: &cancellable)
     }

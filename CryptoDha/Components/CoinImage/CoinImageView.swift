@@ -15,7 +15,7 @@ struct CoinImageView: View {
     }
     
     var body: some View {
-        if let imageData = vm.imageData, let uiimage = UIImage(data: imageData) {
+        if let uiimage = vm.image{
             Image(uiImage: uiimage)
                 .resizable()
                 .scaledToFit()
