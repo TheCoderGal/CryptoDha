@@ -11,10 +11,14 @@ import Combine
 class HomeViewModel: ObservableObject {
     
     @Published var allcoins: [Coin] = []
+    @Published var portfoliocoins: [Coin] = []
+
     @Published var searchText = ""
-    @Published var stats: [Statistics] = [Statistics(title: "title1", value: "val1", percentageChange: 23.23), Statistics(title: "title2", value: "val2"), Statistics(title: "title3", value: "val3", percentageChange: 8.2), Statistics(title: "title4", value: "val4", percentageChange: -7)]
+    @Published var stats: [Statistics] = []
     private let coinDataService = CoinDataService()
-    
+    private let marketDataService = MarketDataService()
+    private let portfolioDataService = PortfolioDataService()
+
     var cancellable = Set<AnyCancellable>()
     
     init() {
@@ -22,7 +26,7 @@ class HomeViewModel: ObservableObject {
     }
     
     func addSubscribers() {
-        ///this gets updated if wither searchtext or allcoins change/update
+        //subscribing search & all markets coins data fetch updates
         $searchText
             .combineLatest(coinDataService.$allCoins)
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
@@ -31,6 +35,54 @@ class HomeViewModel: ObservableObject {
                 self?.allcoins = list
             }
             .store(in: &cancellable)
+        
+        //subscribing global market data updates
+        marketDataService.$marketData
+            .map({ (marketData) -> [Statistics] in
+                var stats = [Statistics]()
+                guard let data = marketData else { return [] }
+                let marketCap = Statistics(title: "Market Cap", value: data.marketCap, percentageChange: data.marketCapChangePercentage24HUsd)
+                stats.append(marketCap)
+
+
+                let volume = Statistics(title: "24h Volume", value: data.volume)
+                
+                stats.append(volume)
+                let btcDominance = Statistics(title: "BTC Dominance", value: data.btcDominance, percentageChange: data.marketCapChangePercentage24HUsd)
+                stats.append(btcDominance)
+
+                let portfolio = Statistics(title: "Portfolio", value: "0.00", percentageChange: 0)
+                stats.append(portfolio)
+
+                
+                return stats
+            })
+            .sink { stats in
+                self.stats = stats
+            }
+            .store(in: &cancellable)
+        
+        //subscribing portfolio updates
+        $allcoins
+            .combineLatest(portfolioDataService.$savedEntities)
+            .map{(coins, entities) -> [Coin] in
+                coins
+                    .compactMap { coin in
+                        guard let entity = entities.first(where: {$0.coinID == coin.id}) else {
+                            return nil
+                        }
+                        return coin
+                    }
+            }
+            .sink { coins in
+                self.portfoliocoins = coins
+            }
+            .store(in: &cancellable)
+           
+    }
+    
+    func updatePortfolio(coin: Coin, amount: Double) {
+        portfolioDataService.updateSavedEntity(coin: coin, amount: amount)
     }
     
     private func filterCoins(text: String, coins: [Coin]) -> [Coin] {

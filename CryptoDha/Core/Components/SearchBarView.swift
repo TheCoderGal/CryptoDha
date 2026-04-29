@@ -17,6 +17,7 @@ struct SearchBarView: View {
                 .foregroundStyle(.accent)
                 .padding()
             TextField("Search by Coin name...", text: $searchText)
+                .font(.subheadline)
                 .foregroundStyle(.accent)
                 .overlay (
                     Image(systemName: "xmark")

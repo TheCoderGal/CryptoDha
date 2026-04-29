@@ -11,15 +11,26 @@ struct HomeView: View {
     
     @State private var showPortfolio = false
     @EnvironmentObject var homeVM: HomeViewModel
-    
+    @State private var editPortfolio = false
+
     var body: some View {
         ZStack {
             Color.theme.background
+                .sheet(isPresented: $editPortfolio) {
+                    PortfolioView()
+                }
             VStack {
                 header
                 HomeStatsView(showPortfolio: $showPortfolio)
                 SearchBarView(searchText: $homeVM.searchText)
-                coinList
+                if !showPortfolio {
+                    allCoinsList
+                        .transition(.move(edge: .leading))
+
+                } else {
+                    portfolioList
+                        .transition(.move(edge: .trailing))
+                }
                 Spacer(minLength: 0)
             }
         }
@@ -39,6 +50,11 @@ extension HomeView {
     private var header: some View {
         HStack {
             CircleButtonView(iconName: showPortfolio ? "plus" : "info")
+                .onTapGesture {
+                    if showPortfolio {
+                        editPortfolio = true
+                    }
+                }
             Spacer()
             Text(showPortfolio ? "Portfolio" : "Live Prices")
                 .font(.headline)
@@ -56,12 +72,19 @@ extension HomeView {
         .padding(.horizontal)
     }
     
-    private var coinList: some View {
+    private var allCoinsList: some View {
         List {
             ForEach(homeVM.allcoins) { coin in
                 CoinRowView(coin: coin, showHoldingsColumn: showPortfolio ? true : false)
             }
         }
-        .transition(.move(edge: showPortfolio ? .leading : .trailing))
+    }
+    
+    private var portfolioList: some View {
+        List {
+            ForEach(homeVM.portfoliocoins) { coin in
+                CoinRowView(coin: coin, showHoldingsColumn: showPortfolio ? true : false)
+            }
+        }
     }
 }

@@ -28,7 +28,7 @@ class NetworkManager {
     }
     
     static func download(url: URLRequest) -> AnyPublisher<Data, Error> {
-       return URLSession.shared.dataTaskPublisher(for: url)
+        return URLSession.shared.dataTaskPublisher(for: url)
             .subscribe(on: DispatchQueue.global(qos: .background))
             .tryMap { (output) -> Data in
                 guard let response = output.response as? HTTPURLResponse else {
@@ -39,6 +39,11 @@ class NetworkManager {
                     let body = String(data: output.data, encoding: .utf8)
                     throw NetworkError.clientSideError(body ?? "")
                 }
+#if DEBUG
+                if let json = String(data: output.data, encoding: .utf8) {
+                    print("✅ JSON:", json)
+                }
+#endif
                 return output.data
             }
             .receive(on: DispatchQueue.main)
