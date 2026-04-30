@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4559080F2FA36114009D4485 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4559080E2FA36103009D4485 /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		453D44C82F9CA0A100C46E82 /* CryptoDha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CryptoDha.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4559080E2FA36103009D4485 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		453D44BF2F9CA0A100C46E82 = {
 			isa = PBXGroup;
 			children = (
+				4559080E2FA36103009D4485 /* .gitignore */,
 				453D44CA2F9CA0A100C46E82 /* CryptoDha */,
 				453D44C92F9CA0A100C46E82 /* Products */,
 			);
@@ -109,6 +115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4559080F2FA36114009D4485 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

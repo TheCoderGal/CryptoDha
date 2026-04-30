@@ -19,7 +19,7 @@ struct CryptoDhaApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            NavigationView {
+            NavigationStack {
                 HomeView()
                     .environmentObject(vm)
                     .navigationBarHidden(true)

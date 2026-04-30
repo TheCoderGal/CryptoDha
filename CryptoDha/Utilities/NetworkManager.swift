@@ -49,4 +49,7 @@ class NetworkManager {
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
+    
 }
+
+
