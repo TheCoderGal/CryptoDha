@@ -113,23 +113,6 @@ extension HomeView {
     
     private var columnTitle: some View {
         HStack {
-//            Image(systemName: "line.3.horizontal.decrease.circle")
-////                .resizable()
-//                .frame(width: 30)
-//                .font(.headline)
-//                .padding(.leading)
-//                .contextMenu(menuItems: {
-//                    List(homeVM.sortOption.allCases, id: ./self) { option in
-//                        Button(action: {
-//                            homeVM.sortOption = option
-//                        }) {
-//                            Text(option.rawValue)
-//                        }
-//                    }
-//                })
-//                .onTapGesture {
-//                    <#code#>
-//                }
             HStack {
                 Text("Coin")
                     .font(.caption)
