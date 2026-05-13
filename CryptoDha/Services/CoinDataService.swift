@@ -27,6 +27,7 @@ class CoinDataService {
         components.queryItems = [
             URLQueryItem(name: "vs_currency", value: "usd"),
             URLQueryItem(name: "ids", value: "bitcoin"),
+            URLQueryItem(name: "sparkline", value: "true"),
             URLQueryItem(name: "names", value: "Bitcoin"),
             URLQueryItem(name: "symbols", value: "btc"),
             URLQueryItem(name: "category", value: "layer-1"),
@@ -34,10 +35,12 @@ class CoinDataService {
             
         ]
         guard let url = components.url else { return }
-        
+        print("URL: \(url)")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("CG-HP55tofR2kpRLqN5w9WUqJtY", forHTTPHeaderField: "x-cg-demo-api-key")
+        print("request: \(request)")
+
         cancellable = NetworkManager.download(url: request)
             .decode(type: [Coin].self, decoder: JSONDecoder())
             .sink { response in

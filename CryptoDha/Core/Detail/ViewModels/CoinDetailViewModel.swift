@@ -13,6 +13,9 @@ class CoinDetailViewModel: ObservableObject {
     
     @Published var additionalDetails: [Statistics] = []
     @Published var overViewDetails: [Statistics] = []
+    @Published var coinDetailDescription: String = "ChainGPT is the leading provider of AI-powered infrastructure for the Web3, blockchain, and crypto space. Its flagship product, AI Hub v2, is a unified ecosystem that consolidates trading, research, smart contract development, and auditing into a single interface. The platform serves retail traders and investors, developers and builders, as well as Web3 startups, all through advanced LLM models specifically fine-tuned for the crypto domain to enable smarter and faster decisions. However, a capable language model alone is not enough. ChainGPT needed a data foundation that could ground its AI in accurate, real-time market information and eliminate the hallucinations that plague general-purpose LLMs when asked about live financial data. By integrating CoinGecko’s API, ChainGPT gave its models the market intelligence they needed to function as a live market analyst rather than a model extrapolating from outdated information."
+    @Published var websiteURL: String? = nil
+    @Published var redditURL: String? = nil
 
     @Published var coin: Coin
     
@@ -31,6 +34,14 @@ class CoinDetailViewModel: ObservableObject {
             .sink(receiveValue: { [weak self] returnedArrays in
                 self?.overViewDetails = returnedArrays.overView
                 self?.additionalDetails = returnedArrays.additional
+            })
+            .store(in: &cancellables)
+        
+        coinDetailDataService?.$detail
+            .sink(receiveValue: { [weak self] detail in
+//                self?.coinDetailDescription = detail?.readableDescription ?? ""
+                self?.websiteURL = detail?.links?.homepage?.first
+                self?.redditURL = detail?.links?.subredditURL
             })
             .store(in: &cancellables)
     }

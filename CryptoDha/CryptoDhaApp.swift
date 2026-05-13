@@ -10,7 +10,8 @@ import SwiftUI
 @main
 struct CryptoDhaApp: App {
     @StateObject private var vm = HomeViewModel()
-    
+    @State private var showLaunchView = true
+
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor : Color.theme.accent]
         
@@ -19,10 +20,15 @@ struct CryptoDhaApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                HomeView()
-                    .environmentObject(vm)
-                    .navigationBarHidden(true)
+            ZStack {
+                NavigationStack {
+                    HomeView()
+                        .environmentObject(vm)
+                        .navigationBarHidden(true)
+                }
+                ZStack {
+                    LaunchView(showLaunchView: $showLaunchView)
+                }.zIndex(2)
             }
         }
     }

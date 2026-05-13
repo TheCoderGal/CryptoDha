@@ -17,7 +17,7 @@ struct DetailLoadingView: View {
                 .onAppear {
                     print("Selected name \(coin.name)")
                 }
-                
+            
         }
     }
 }
@@ -26,6 +26,7 @@ struct DetailView: View {
     
     let coin: Coin
     @StateObject var vm: CoinDetailViewModel
+    @State var didReadMore = false
     
     let columns: [GridItem] = [.init(.flexible()), .init(.flexible())]
     
@@ -37,19 +38,46 @@ struct DetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 30) {
-                Text("")
-                    .frame(height: 250)
+            VStack(alignment: .leading, spacing: 30) {
+                ChartView(coin: coin)
                 titleView(text: "Overview")
                 Divider()
+                VStack(alignment: .leading) {
+                    Text(vm.coinDetailDescription)
+                        .font(.callout)
+                        .foregroundStyle(Color.theme.secondaryText)
+                        .lineLimit(didReadMore ? nil : 3)
+                    Button(action: {
+                        withAnimation(.easeInOut) {
+                            didReadMore.toggle()
+                        }
+                    }) {
+                        Text(didReadMore ? "See less..." : "Read More...")
+                            .font(.caption)
+                            .foregroundStyle(.blue)
+                    }
+                }
                 overViewGridView
                 titleView(text: "Additional Details")
                 Divider()
                 additionalGridView
+                if let link = vm.websiteURL, let url = URL(string: link) {
+                    Link(destination: url) {
+                        Text("Website")
+                            .font(.caption)
+                            .foregroundStyle(.blue)
+                    }
+                }
+                if let link = vm.redditURL, let url = URL(string: link) {
+                    Link(destination: url) {
+                        Text("Reddit")
+                            .font(.caption)
+                            .foregroundStyle(.blue)
+                    }
+                }
             }
             .padding()
         }
-//        .navigationTitle(coin.name)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 toolBarTrailingItem
@@ -59,8 +87,8 @@ struct DetailView: View {
 }
 
 #Preview {
-        DetailView(coin: Preview.dev.coin)
-
+    DetailView(coin: Preview.dev.coin)
+    
 }
 
 extension DetailView {
