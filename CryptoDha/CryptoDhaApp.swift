@@ -26,9 +26,11 @@ struct CryptoDhaApp: App {
                         .environmentObject(vm)
                         .navigationBarHidden(true)
                 }
-                ZStack {
-                    LaunchView(showLaunchView: $showLaunchView)
-                }.zIndex(2)
+                if showLaunchView {
+                    ZStack {
+                        LaunchView(showLaunchView: $showLaunchView)
+                    }.zIndex(2)
+                }
             }
         }
     }
